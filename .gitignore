@@ -1,0 +1,25 @@
+# Entorno virtual: se reconstruye con PLAN_60MIN.md, no se versiona.
+.venv/
+
+# Pesos de modelos y caché de PaddleOCR/PaddleX
+*.pdmodel
+*.pdiparams
+*.onnx
+.paddleocr/
+.paddlex/
+
+# Salidas regenerables
+data/processed/
+data/outputs/
+logs/
+
+# PDFs grandes: el original de la clase pesa ~5 MB y sí se versiona;
+# cualquier otro PDF de más de 10 MB queda fuera.
+data/raw/*.pdf
+!data/raw/BASE-ESTANDAR-ILO-SEACE-OCR.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/

@@ -1,0 +1,54 @@
+# config.yaml — único lugar con valores ajustables.
+# Regla del repositorio: ningún valor de estos vive hardcodeado en el código Python.
+
+rutas:
+  pdf_entrada: data/raw/BASE-ESTANDAR-ILO-SEACE-OCR.pdf
+  procesados: data/processed
+  salidas: data/outputs
+  logs: logs
+
+triaje:
+  # Una página con más de este número de caracteres en su capa de texto se considera
+  # "texto" y no necesita OCR. Por debajo, es "imagen".
+  umbral_caracteres: 50
+
+render:
+  dpi_fisico: 425          # hoja física; 425 deja la página lógica cerca de 300 DPI
+  dos_por_pagina: true     # partir cada hoja en dos páginas lógicas
+  eje_corte: horizontal    # las dos páginas están una sobre otra
+  rotacion: 270            # auto | 0 | 90 | 180 | 270. Verificado: 270 en este documento.
+  # Verificado sobre el documento real: la mitad INFERIOR es la página de número menor.
+  orden_mitades: inferior_primero   # inferior_primero | superior_primero
+
+ocr:
+  motor: paddleocr
+  version_modelo: PP-OCRv6
+  nivel: medium            # tiny | small | medium
+  idioma: es
+  device: gpu              # gpu | cpu   (PaddleOCR 3.x: device, NO use_gpu)
+  usar_clasificador_orientacion: true
+  usar_desenrollado: false
+  umbral_confianza: 0.80
+
+benchmark:
+  # Medido en esta máquina: con nivel `medium` a 425 DPI, una página en CPU no termina
+  # en varios minutos. Para la comparación CPU vs GPU de clase, poner ocr.nivel: tiny
+  # arriba: ambos devices miden lo mismo y el bloque entra en el tiempo.
+  # `python -m src.bench rapido` recorta además la muestra a 1 + 3 páginas.
+  paginas_calentamiento: 2
+  paginas_medidas: 10
+  condiciones_dpi: [150, 300, 425]
+  condiciones_device: [cpu, gpu]
+  niveles: [tiny, small, medium]
+
+extraccion:
+  campos:
+    - entidad_convocante
+    - numero_procedimiento
+    - objeto_contratacion
+    - departamento
+  # Verificado sobre el documento real: los cuatro campos NO están en una sola página.
+  # El nombre de la entidad vive en el encabezado de la hoja física (hoja 1, página
+  # lógica 2); el objeto, el número y el departamento están en la carátula interna
+  # (hoja 2, página lógica 3). Por eso se procesan las dos hojas, con sus dos mitades.
+  hojas_metadatos: [1, 2]
