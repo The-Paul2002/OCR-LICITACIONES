@@ -1,8 +1,15 @@
 # Laboratorio de OCR — clase UP + piloto Zaragoza
 
+[![Abrir el notebook de clase en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/patrickmelorr-lang/OCR-LICITACIONES/blob/main/notebooks/00_colab_clase.ipynb)
+[![Abrir el mini-proyecto en Colab](https://img.shields.io/badge/Colab-mini--proyecto-F9AB00?logo=googlecolab&logoColor=white)](https://colab.research.google.com/github/patrickmelorr-lang/OCR-LICITACIONES/blob/main/notebooks/01_mini_zaragoza.ipynb)
+
 Lectura automatizada de bases de licitación escaneadas. Caso real: las bases de la
 Licitación Pública de Obras N° 05-2026-C-MPI de la Municipalidad Provincial de Ilo,
 descargadas de SEACE.
+
+> **Estudiantes: empiecen por el primer badge.** Abre el notebook de la clase en Colab,
+> sin instalar nada. Acuérdense de poner el entorno en **GPU T4** antes de correr:
+> *Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU*.
 
 Material de la **Semana 10** del curso Data Science con Python (Universidad del
 Pacífico): *Document AI y voz: OCR, extracción estructurada y ASR*.

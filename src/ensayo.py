@@ -13,6 +13,14 @@ maquina se come mas de la mitad del bloque, el bloque no entra.
 Uso:
     python -m src.ensayo              # ensayo completo, desde cero
     python -m src.ensayo --con-cache  # sin borrar lo ya procesado
+    python -m src.ensayo --cpu        # simula el carril B, sin GPU
+
+Lo que este ensayo NO mide, y es donde esta el riesgo real del salon:
+
+    - La instalacion. En el carril A son unos 3 minutos de Colab por estudiante, y
+      25 a la vez contra el wifi del aula es otra cosa.
+    - La primera descarga de los pesos del modelo. Aqui ya estaban en disco.
+    - El tiempo humano: explicar, responder, recorrer el salon.
 """
 
 from __future__ import annotations
@@ -91,7 +99,8 @@ def limpiar_estado(config: dict[str, Any]) -> None:
     preparar_directorios(config)
 
 
-def ejecutar(config: dict[str, Any] | None = None, limpiar: bool = True) -> list[Bloque]:
+def ejecutar(config: dict[str, Any] | None = None, limpiar: bool = True,
+             forzar_cpu: bool = False) -> list[Bloque]:
     """Corre el ensayo completo y devuelve los bloques medidos."""
     config = config or cargar_config()
     preparar_directorios(config)
@@ -104,7 +113,13 @@ def ejecutar(config: dict[str, Any] | None = None, limpiar: bool = True) -> list
 
     # El carril de clase: nivel tiny, que es el unico que entra en el tiempo si
     # alguien corre en CPU. Ver GUION_CLASE_110MIN.md, bloque 4.
-    config_clase = {**config, "ocr": {**config["ocr"], "nivel": "tiny"}}
+    ocr_clase = {**config["ocr"], "nivel": "tiny"}
+    if forzar_cpu:
+        # Simula el carril B: una maquina sin GPU. El benchmark igual mide las dos
+        # condiciones, porque la comparacion es justamente lo que se ensena.
+        ocr_clase["device"] = "cpu"
+        log.warning("Ensayo del carril B: se fuerza device=cpu.")
+    config_clase = {**config, "ocr": ocr_clase}
 
     from src import bench, extraer, ocr_run, preparar, triaje
     from src import doctor as mod_doctor
@@ -205,7 +220,8 @@ def imprimir_informe(bloques: list[Bloque]) -> None:
 
 def main() -> int:
     limpiar = "--con-cache" not in sys.argv
-    ejecutar(limpiar=limpiar)
+    forzar_cpu = "--cpu" in sys.argv
+    ejecutar(limpiar=limpiar, forzar_cpu=forzar_cpu)
     return 0
 
 
