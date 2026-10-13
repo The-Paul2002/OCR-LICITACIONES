@@ -1,0 +1,92 @@
+{
+  // Cada entrada es un paso del pipeline. Se eligen en el panel "Ejecutar y depurar"
+  // (Ctrl+Shift+D) y se lanzan con F5. El orden de la lista es el orden del pipeline.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "1. doctor — ¿la GPU está en uso?",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.doctor",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": false
+    },
+    {
+      "name": "2. triaje — ¿qué páginas necesitan OCR?",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.triaje",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "3. preparar — hojas 1 a 2",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.preparar",
+      "args": ["1", "2"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "3b. preparar — TODAS las hojas (tarda)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.preparar",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "4. ocr_run — todas las imágenes preparadas",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.ocr_run",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "5. extraer — 4 campos (reglas + modelo)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.extraer",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "5b. extraer — solo reglas (sin API)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.extraer",
+      "args": ["reglas"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "6. bench rápido — CPU vs GPU",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.bench",
+      "args": ["rapido"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "7. ensayo cronometrado de la clase",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.ensayo",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "7b. ensayo del carril B (sin GPU)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.ensayo",
+      "args": ["--cpu"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  // El interprete del proyecto es SIEMPRE el del venv de Python 3.12.
+  // El Python 3.14 del sistema no sirve: PaddlePaddle soporta 3.9 a 3.13.
+  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+
+  // La terminal integrada activa el venv sola al abrirse.
+  "python.terminal.activateEnvironment": true,
+
+  // Los modulos se ejecutan con `python -m src.x`, asi que la raiz del proyecto
+  // tiene que estar en el path.
+  "python.analysis.extraPaths": ["${workspaceFolder}"],
+  "terminal.integrated.env.windows": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+
+  // Los notebooks arrancan con el kernel del venv, sin preguntar.
+  "jupyter.kernels.filter": [
+    {
+      "path": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "type": "pythonEnvironment"
+    }
+  ],
+  "notebook.output.textLineLimit": 60,
+
+  // Carpetas que solo ensucian el explorador: son regenerables.
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    ".venv": true
+  },
+  "search.exclude": {
+    ".venv": true,
+    "data/processed": true,
+    "logs": true
+  },
+
+  "files.encoding": "utf8",
+  "[python]": {
+    "editor.rulers": [88]
+  }
+}

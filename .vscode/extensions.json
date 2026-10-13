@@ -1,0 +1,10 @@
+{
+  // VS Code las ofrece al abrir la carpeta. Las tres primeras son las que hacen
+  // falta para correr los notebooks y los módulos; la de YAML es por config.yaml.
+  "recommendations": [
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "ms-python.vscode-pylance",
+    "redhat.vscode-yaml"
+  ]
+}

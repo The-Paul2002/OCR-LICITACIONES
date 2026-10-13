@@ -72,6 +72,47 @@ Runbook completo con puntos de corte: [`PLAN_60MIN.md`](PLAN_60MIN.md).
 
 ---
 
+## Correrlo en VS Code
+
+La carpeta `.vscode/` ya trae el intérprete, los lanzadores y las extensiones
+recomendadas. No hay que configurar nada a mano.
+
+```powershell
+cd C:\Users\LENOVO\Documents\PAUL\UP\OCR
+code .
+```
+
+Al abrirla, VS Code ofrece instalar las extensiones necesarias (Python, Jupyter,
+Pylance). Aceptar. Después:
+
+### Correr un módulo
+
+`Ctrl+Shift+D` abre **Ejecutar y depurar**. El desplegable de arriba tiene el pipeline
+en orden, de `1. doctor` a `7. ensayo cronometrado`. Se elige uno y se lanza con `F5`.
+
+También sirve la terminal integrada, que ya arranca con el venv activado:
+
+```powershell
+python -m src.doctor
+```
+
+> Si el prompt no muestra `(.venv)` al inicio de la línea, se está usando el Python
+> 3.14 del sistema y nada va a funcionar. `Ctrl+Shift+P` → *Python: Select Interpreter*
+> → el de `.venv\Scripts\python.exe`.
+
+### Correr un notebook
+
+Abrir `notebooks/01_mini_zaragoza.ipynb` y elegir el kernel **Python 3.12 (OCR UP)**
+arriba a la derecha. Las celdas se corren con `Shift+Enter`.
+
+La primera celda se encarga de moverse a la raíz del proyecto, así que el notebook
+funciona igual abierto desde `notebooks/`.
+
+> Los notebooks necesitan `ipykernel`, que ya está en el venv. Si VS Code pide
+> instalarlo, es que el kernel seleccionado no es el del proyecto.
+
+---
+
 ## Uso
 
 Cada módulo se ejecuta por sí solo y es importable sin efectos secundarios.
