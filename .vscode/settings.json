@@ -12,14 +12,6 @@
   "terminal.integrated.env.windows": {
     "PYTHONPATH": "${workspaceFolder}"
   },
-
-  // Los notebooks arrancan con el kernel del venv, sin preguntar.
-  "jupyter.kernels.filter": [
-    {
-      "path": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "type": "pythonEnvironment"
-    }
-  ],
   "notebook.output.textLineLimit": 60,
 
   // Carpetas que solo ensucian el explorador: son regenerables.
@@ -38,4 +30,10 @@
   "[python]": {
     "editor.rulers": [88]
   }
+
+  // NO poner aqui `jupyter.kernels.filter` ni
+  // `jupyter.kernels.excludePythonEnvironments` apuntando al venv: las dos OCULTAN
+  // los kernels que listan, no los seleccionan. Con cualquiera de las dos, el kernel
+  // del proyecto desaparece del selector y los notebooks no abren.
+  // `python.defaultInterpreterPath`, arriba, ya basta para que VS Code lo elija.
 }

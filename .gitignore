@@ -23,3 +23,21 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .ipynb_checkpoints/
+
+# ---------------------------------------------------------------------------
+# SECRETOS. Nada de esto se versiona nunca.
+#
+# Una clave de API subida a un repositorio publico queda en el historial de git
+# para siempre, y los bots que rastrean GitHub la encuentran en minutos. Borrarla
+# en un commit posterior NO la saca del historial: hay que revocarla.
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.key
+secrets.*
+
+# Salidas que los notebooks escriben al lado de si mismos
+notebooks/procesadas/
+notebooks/salidas/
+notebooks/data/
