@@ -58,6 +58,58 @@ sistema salvo la herramienta `uv`.
 
 ---
 
+## 3.bis Reglas sobre secretos y notebooks
+
+Estas tres ya se rompieron una vez. Están aquí para que no vuelva a pasar.
+
+### Ninguna clave de API se escribe en un archivo
+
+Ni en una celda, ni en un `.py`, ni "solo para probar". Una clave escrita en una celda
+se guarda **dentro** del `.ipynb`; el `.ipynb` se commitea; y una clave que llegó a un
+repositorio público queda en el historial de git para siempre. Borrarla en un commit
+posterior **no** la saca del historial: hay que revocarla.
+
+El montaje correcto, ya implementado:
+
+- La clave vive en `.env`, que `.gitignore` excluye. La plantilla versionada es
+  `.env.example`.
+- `src/comun.py` llama a `cargar_entorno()` al importarse, así que cualquier
+  `from src.x import y` deja la clave en el entorno sin que nadie la escriba.
+- En Colab, donde no hay `.env`, se pide con `getpass`, que no muestra lo escrito ni
+  lo deja en la salida de la celda.
+- Ninguna celda imprime la clave, ni siquiera un fragmento: lo que se imprime queda
+  guardado en el `.ipynb`.
+
+### El `source` de una celda lleva saltos de línea
+
+El formato `.ipynb` exige que cada elemento de `source` termine en `\n` menos el
+último. Si faltan, al unirlos el código queda pegado en una sola línea:
+
+```
+import matplotlib.pyplot as pltpagina = mitades[0]fig, ejes = ...
+```
+
+**Jupyter y VS Code lo toleran y lo muestran bien.** `nbconvert`, Colab y cualquier
+herramienta que siga el formato ven una sola línea y revientan con `SyntaxError`. Es
+decir: el notebook funciona en la máquina de quien lo escribió y falla en la de los 25
+estudiantes. Un notebook generado por script es el caso típico.
+
+Antes de cada entrega:
+
+```powershell
+python -m src.normalizar_notebooks --revisar
+```
+
+Revisa el formato **y** que cada celda de código compile, saltando las que llevan
+magics de IPython (`%pip`, `!comando`), que son válidas aunque `ast` no las entienda.
+
+### Las salidas guardadas no se publican
+
+Traen rutas locales, fragmentos de lo que se haya impreso e imágenes en base64 que
+inflan el archivo. `python -m src.normalizar_notebooks --limpiar` las borra.
+
+---
+
 ## 4. Convenciones de código
 
 - Español en comentarios, mensajes de log y docstrings. Nombres de función en español

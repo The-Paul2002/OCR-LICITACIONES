@@ -29,8 +29,18 @@
   "files.encoding": "utf8",
   "[python]": {
     "editor.rulers": [88]
+<<<<<<< HEAD
   },
   "jupyter.kernels.excludePythonEnvironments": [
     "${workspaceFolder}\\.venv\\Scripts\\python.exe"
   ]
+=======
+  }
+
+  // NO poner aqui `jupyter.kernels.filter` ni
+  // `jupyter.kernels.excludePythonEnvironments` apuntando al venv: las dos OCULTAN
+  // los kernels que listan, no los seleccionan. Con cualquiera de las dos, el kernel
+  // del proyecto desaparece del selector y los notebooks no abren.
+  // `python.defaultInterpreterPath`, arriba, ya basta para que VS Code lo elija.
+>>>>>>> 062be81c45092d5e26bca000bbada1ff660636a0
 }

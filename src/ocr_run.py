@@ -91,7 +91,6 @@ def construir_ocr(config: dict[str, Any], device: str | None = None,
              nivel, device, cfg["idioma"])
 
     parametros: dict[str, Any] = {
-        "lang": cfg["idioma"],
         "device": device,
         "use_doc_orientation_classify": cfg["usar_clasificador_orientacion"],
         "use_doc_unwarping": cfg["usar_desenrollado"],
@@ -110,8 +109,13 @@ def construir_ocr(config: dict[str, Any], device: str | None = None,
 
     det, rec = MODELOS_POR_NIVEL.get(nivel, (None, None))
     if det and rec:
+        # Cuando se nombran los modelos explicitamente, `lang` se ignora: el modelo
+        # ya determina el idioma. Pasarlo igual solo produce un UserWarning en cada
+        # construccion, y un warning que siempre sale es un warning que nadie lee.
         parametros["text_detection_model_name"] = det
         parametros["text_recognition_model_name"] = rec
+    else:
+        parametros["lang"] = cfg["idioma"]
 
     t0 = time.perf_counter()
     ocr = PaddleOCR(**parametros)

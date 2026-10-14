@@ -21,6 +21,40 @@ import yaml
 RAIZ = Path(__file__).resolve().parent.parent
 
 
+def cargar_entorno() -> bool:
+    """Carga las variables de `.env` al entorno del proceso. Devuelve si lo encontro.
+
+    Existe para que NINGUN notebook ni modulo tenga que escribir una clave de API en
+    su propio texto. Se llama sola al importar este modulo, asi que basta con tener
+    el `.env` en la raiz del proyecto.
+
+    Por que importa: una clave escrita en una celda se guarda dentro del .ipynb, el
+    .ipynb se commitea, y una clave que llego a un repositorio publico queda en el
+    historial de git para siempre. Borrarla despues no la saca del historial; hay que
+    revocarla. La plantilla esta en `.env.example`, y `.gitignore` excluye el `.env`.
+    """
+    ruta = RAIZ / ".env"
+    if not ruta.exists():
+        return False
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        # Sin python-dotenv se lee a mano: no vale la pena fallar por esto.
+        for linea in ruta.read_text(encoding="utf-8").splitlines():
+            linea = linea.strip()
+            if not linea or linea.startswith("#") or "=" not in linea:
+                continue
+            clave, _, valor = linea.partition("=")
+            os.environ.setdefault(clave.strip(), valor.strip().strip('"').strip("'"))
+        return True
+    load_dotenv(ruta)
+    return True
+
+
+# Se carga al importar: cualquier `from src.x import y` deja el entorno listo.
+cargar_entorno()
+
+
 def cargar_config(ruta: str | Path | None = None) -> dict[str, Any]:
     """Devuelve el contenido de config.yaml como diccionario."""
     ruta = Path(ruta) if ruta else RAIZ / "config.yaml"

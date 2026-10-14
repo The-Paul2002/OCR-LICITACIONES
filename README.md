@@ -72,6 +72,48 @@ Runbook completo con puntos de corte: [`PLAN_60MIN.md`](PLAN_60MIN.md).
 
 ---
 
+## La clave de API (vía B de la extracción)
+
+La vía A funciona sin API. La vía B necesita una clave de Anthropic, y **nunca se
+escribe dentro de un notebook ni de un `.py`**:
+
+```powershell
+copy .env.example .env
+```
+
+y se pega la clave dentro del `.env`. Eso es todo: `src/comun.py` la carga sola al
+importar cualquier módulo, y `.gitignore` excluye el `.env`.
+
+> **Por qué importa.** Una clave escrita en una celda se guarda dentro del `.ipynb`,
+> el `.ipynb` se commitea, y una clave que llegó a un repositorio público queda en el
+> historial de git **para siempre**. Borrarla en un commit posterior no la saca del
+> historial: hay que revocarla y generar otra. Los bots que rastrean GitHub encuentran
+> claves en minutos.
+
+En Colab, donde no hay `.env`, el notebook la pide con `getpass`: no se ve al
+escribirla y no queda en la salida de la celda.
+
+---
+
+## Antes de publicar un notebook
+
+```powershell
+python -m src.normalizar_notebooks --revisar
+```
+
+Revisa dos cosas que el editor no revisa:
+
+1. **Que el `source` lleve los saltos de línea.** El formato `.ipynb` los exige. Si
+   faltan, el código queda pegado en una sola línea. Jupyter y VS Code lo toleran y lo
+   muestran bien; `nbconvert` y Colab revientan con `SyntaxError`. Un notebook así
+   funciona en la máquina de quien lo escribió y falla en la de los estudiantes.
+2. **Que cada celda de código compile.** Un string partido a la mitad sobrevive al
+   guardado y solo falla al ejecutar.
+
+Con `--limpiar` borra además las salidas guardadas, que traen rutas locales y pesan.
+
+---
+
 ## Correrlo en VS Code
 
 La carpeta `.vscode/` ya trae el intérprete, los lanzadores y las extensiones
