@@ -10,6 +10,7 @@ necesita un numero, lo pide aqui.
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -95,3 +96,31 @@ def preparar_directorios(config: dict[str, Any]) -> None:
     """Crea las carpetas de salida declaradas en config.yaml si no existen."""
     for clave in ("procesados", "salidas", "logs"):
         ruta_absoluta(config["rutas"][clave]).mkdir(parents=True, exist_ok=True)
+
+
+def preparar_paddle() -> Path | None:
+    """Deja listo el entorno de Paddle. Debe llamarse ANTES de importar paddle o paddleocr.
+
+    1. CPU: apaga oneDNN (MKLDNN) por defecto. Con paddlepaddle 3.4.0, PaddleX lo activa en CPU
+       y el modelo falla con 'ConvertPirAttribute2RuntimeAttribute not support'.
+       Con la variable apagada, el OCR en CPU funciona. La GPU no usa oneDNN, no cambia.
+
+    2. Windows: pone en el PATH las DLL de CUDA 13 que trae paddlepaddle-gpu 3.4.0.
+
+    Las DLL (cublas64_13.dll, etc.) viven dentro del .venv, en nvidia/cu13/bin/x86_64,
+    y Windows no las busca ahi. Sin este paso Paddle muere al importarse con
+    'cublas64_13.dll ... error code 126'. Debe llamarse ANTES de importar paddle.
+
+    No hace nada en Linux/Colab, ni si la carpeta no existe (entonces Paddle usa CPU).
+    Devuelve la carpeta agregada, o None.
+    """
+    os.environ["PADDLE_PDX_ENABLE_MKLDNN_BYDEFAULT"] = "False"
+
+    if sys.platform != "win32":
+        return None
+    carpeta = Path(sys.prefix) / "Lib" / "site-packages" / "nvidia" / "cu13" / "bin" / "x86_64"
+    if not carpeta.is_dir():
+        return None
+    os.environ["PATH"] = str(carpeta) + os.pathsep + os.environ.get("PATH", "")
+    logging.getLogger("comun").info("DLL de CUDA 13 agregadas al PATH: %s", carpeta)
+    return carpeta

@@ -42,7 +42,7 @@ from dataclasses import dataclass, asdict, field
 from pathlib import Path
 from typing import Any
 
-from src.comun import cargar_config, configurar_logging, preparar_directorios, ruta_absoluta
+from src.comun import cargar_config, configurar_logging, preparar_directorios, preparar_paddle, ruta_absoluta
 
 log = configurar_logging("extraer")
 
@@ -463,6 +463,7 @@ def ejecutar(config: dict[str, Any] | None = None,
 
 
 def main() -> int:
+    preparar_paddle()
     solo_reglas = len(sys.argv) > 1 and sys.argv[1] == "reglas"
     ejecutar(solo_reglas=solo_reglas)
     return 0

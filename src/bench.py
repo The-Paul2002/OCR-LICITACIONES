@@ -34,7 +34,7 @@ from dataclasses import dataclass, asdict, field
 from pathlib import Path
 from typing import Any
 
-from src.comun import cargar_config, configurar_logging, preparar_directorios, ruta_absoluta
+from src.comun import cargar_config, configurar_logging, preparar_directorios, preparar_paddle, ruta_absoluta
 from src.doctor import DELTA_VRAM_MINIMO_MIB, leer_vram_usada_mib
 
 log = configurar_logging("bench")
@@ -406,6 +406,7 @@ def ejecutar(config: dict[str, Any] | None = None, rapido: bool = False) -> list
 
 
 def main() -> int:
+    preparar_paddle()
     rapido = len(sys.argv) > 1 and sys.argv[1] == "rapido"
     ejecutar(rapido=rapido)
     return 0

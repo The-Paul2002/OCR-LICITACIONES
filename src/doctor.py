@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from importlib import metadata
 from typing import Any
 
-from src.comun import cargar_config, configurar_logging
+from src.comun import cargar_config, configurar_logging, preparar_paddle
 
 log = configurar_logging("doctor")
 
@@ -309,6 +309,7 @@ def hay_gpu_utilizable(config: dict[str, Any] | None = None) -> bool:
 
 
 def main() -> int:
+    preparar_paddle()
     config = cargar_config()
     log.info("=== doctor.py, semaforo de GPU ===")
     log.info("config.yaml pide ocr.device=%r, ocr.nivel=%r",

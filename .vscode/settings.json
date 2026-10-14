@@ -12,14 +12,6 @@
   "terminal.integrated.env.windows": {
     "PYTHONPATH": "${workspaceFolder}"
   },
-
-  // Los notebooks arrancan con el kernel del venv, sin preguntar.
-  "jupyter.kernels.filter": [
-    {
-      "path": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "type": "pythonEnvironment"
-    }
-  ],
   "notebook.output.textLineLimit": 60,
 
   // Carpetas que solo ensucian el explorador: son regenerables.
@@ -37,5 +29,8 @@
   "files.encoding": "utf8",
   "[python]": {
     "editor.rulers": [88]
-  }
+  },
+  "jupyter.kernels.excludePythonEnvironments": [
+    "${workspaceFolder}\\.venv\\Scripts\\python.exe"
+  ]
 }

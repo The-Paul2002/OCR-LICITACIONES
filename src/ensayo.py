@@ -32,7 +32,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
-from src.comun import cargar_config, configurar_logging, preparar_directorios, ruta_absoluta
+from src.comun import cargar_config, configurar_logging, preparar_directorios, preparar_paddle, ruta_absoluta
 
 log = configurar_logging("ensayo")
 
@@ -219,6 +219,7 @@ def imprimir_informe(bloques: list[Bloque]) -> None:
 
 
 def main() -> int:
+    preparar_paddle()
     limpiar = "--con-cache" not in sys.argv
     forzar_cpu = "--cpu" in sys.argv
     ejecutar(limpiar=limpiar, forzar_cpu=forzar_cpu)

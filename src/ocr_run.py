@@ -33,7 +33,7 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any
 
-from src.comun import cargar_config, configurar_logging, preparar_directorios, ruta_absoluta
+from src.comun import cargar_config, configurar_logging, preparar_directorios, preparar_paddle, ruta_absoluta
 
 log = configurar_logging("ocr_run")
 
@@ -288,6 +288,7 @@ def ejecutar(config: dict[str, Any] | None = None,
 
 
 def main() -> int:
+    preparar_paddle()
     config = cargar_config()
     if len(sys.argv) > 1:
         rutas = [Path(a) for a in sys.argv[1:]]
